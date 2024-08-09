@@ -1,8 +1,7 @@
 "use client"
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { FaEdit, FaTrash } from 'react-icons/fa'
+import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa'
 import Link from 'next/link'
 
 export default function ProductsPage() {
@@ -31,7 +30,7 @@ export default function ProductsPage() {
         setError(error.message)
         setLoading(false)
       })
-  }, [deleting]) // Vuelve a cargar los productos si se elimina uno
+  }, [deleting])
 
   const handleDelete = async (id) => {
     setDeleting(true)
@@ -61,6 +60,11 @@ export default function ProductsPage() {
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">Product List</h1>
+      <div className="mb-4">
+        <Link href="/products/new" className="bg-green-500 text-white px-4 py-2 rounded flex items-center">
+          <FaPlus className="mr-2" /> Add New Product
+        </Link>
+      </div>
       <ul>
         {products.map((product) => (
           <li key={product.id} className="border-b py-2 flex justify-between items-center">
