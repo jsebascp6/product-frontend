@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 export default function NewProductPage() {
   const [name, setName] = useState('')
@@ -73,7 +74,10 @@ export default function NewProductPage() {
           />
         </div>
         {error && <p className="text-red-500">{error}</p>}
-        <div className="flex justify-end">
+        <div className="flex justify-between items-center">
+          <Link href="/products" className="text-gray-500 hover:text-gray-700 transition-colors">
+            Back to Products
+          </Link>
           <button
             type="submit"
             className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors"
