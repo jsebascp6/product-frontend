@@ -1,6 +1,9 @@
 "use client"
 
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { FaEdit } from 'react-icons/fa'
+import Link from 'next/link'
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([])
@@ -37,12 +40,14 @@ export default function ProductsPage() {
       <h1 className="text-2xl font-bold mb-4">Product List</h1>
       <ul>
         {products.map((product) => (
-          <li key={product.id} className="border-b py-2">
-            {product.name} - ${product.price}
+          <li key={product.id} className="border-b py-2 flex justify-between items-center">
+            <span>{product.id} - {product.name} - ${product.price}</span>
+            <Link href={`/products/${product.id}/edit`} className="text-blue-500">
+              <FaEdit className="inline-block ml-4" />
+            </Link>
           </li>
         ))}
       </ul>
     </div>
   )
 }
-
