@@ -70,48 +70,49 @@ export default function EditProductPage() {
   if (error) return <p>Error: {error}</p>
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Edit Product</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="container mx-auto p-4 max-w-lg">
+      <h1 className="text-3xl font-bold mb-6 text-center">Edit Product</h1>
+      <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded-lg shadow-md">
         <div>
-          <label className="block mb-1">Name</label>
+          <label className="block mb-2 font-semibold text-gray-700">Name</label>
           <input
             type="text"
-            className="border p-2 w-full"
+            className="border border-gray-300 p-2 w-full rounded-lg focus:outline-none focus:border-blue-500"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
           />
         </div>
         <div>
-          <label className="block mb-1">Description</label>
+          <label className="block mb-2 font-semibold text-gray-700">Description</label>
           <textarea
-            className="border p-2 w-full"
+            className="border border-gray-300 p-2 w-full rounded-lg focus:outline-none focus:border-blue-500"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
           />
         </div>
         <div>
-          <label className="block mb-1">Price</label>
+          <label className="block mb-2 font-semibold text-gray-700">Price</label>
           <input
             type="number"
-            className="border p-2 w-full"
+            className="border border-gray-300 p-2 w-full rounded-lg focus:outline-none focus:border-blue-500"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
             required
           />
         </div>
         {error && <p className="text-red-500">{error}</p>}
-        <button
-          type="submit"
-          className="bg-blue-500 text-white px-4 py-2"
-          disabled={loading}
-        >
-          {loading ? 'Updating...' : 'Update Product'}
-        </button>
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+            disabled={loading}
+          >
+            {loading ? 'Updating...' : 'Update Product'}
+          </button>
+        </div>
       </form>
     </div>
   )
 }
-
