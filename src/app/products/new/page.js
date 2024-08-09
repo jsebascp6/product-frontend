@@ -8,14 +8,14 @@ export default function NewProductPage() {
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [price, setPrice] = useState('')
-  const [error, setError] = useState(null)
+  const [errors, setErrors] = useState({})
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
-    setError(null)
+    setErrors({})
 
     const product = { name, description, price: parseFloat(price) }
 
@@ -30,12 +30,19 @@ export default function NewProductPage() {
       })
 
       if (!res.ok) {
-        throw new Error('Failed to create product')
+        const data = await res.json()
+        if (res.status === 422) {
+          setErrors(data)
+        } else {
+          throw new Error('Failed to create product')
+        }
+        setLoading(false)
+        return
       }
 
       router.push('/products')
     } catch (error) {
-      setError(error.message)
+      setErrors({ general: error.message })
       setLoading(false)
     }
   }
@@ -48,32 +55,41 @@ export default function NewProductPage() {
           <label className="block mb-2 font-semibold text-gray-700">Name</label>
           <input
             type="text"
-            className="border border-gray-300 p-2 w-full rounded-lg focus:outline-none focus:border-blue-500"
+            className={`border p-2 w-full rounded-lg focus:outline-none focus:border-blue-500 ${
+              errors.name ? 'border-red-500' : 'border-gray-300'
+            }`}
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
           />
+          {errors.name && <p className="text-red-500 text-sm">{errors.name.join(', ')}</p>}
         </div>
         <div>
           <label className="block mb-2 font-semibold text-gray-700">Description</label>
           <textarea
-            className="border border-gray-300 p-2 w-full rounded-lg focus:outline-none focus:border-blue-500"
+            className={`border p-2 w-full rounded-lg focus:outline-none focus:border-blue-500 ${
+              errors.description ? 'border-red-500' : 'border-gray-300'
+            }`}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
           />
+          {errors.description && <p className="text-red-500 text-sm">{errors.description.join(', ')}</p>}
         </div>
         <div>
           <label className="block mb-2 font-semibold text-gray-700">Price</label>
           <input
             type="number"
-            className="border border-gray-300 p-2 w-full rounded-lg focus:outline-none focus:border-blue-500"
+            className={`border p-2 w-full rounded-lg focus:outline-none focus:border-blue-500 ${
+              errors.price ? 'border-red-500' : 'border-gray-300'
+            }`}
             value={price}
             onChange={(e) => setPrice(e.target.value)}
             required
           />
+          {errors.price && <p className="text-red-500 text-sm">{errors.price.join(', ')}</p>}
         </div>
-        {error && <p className="text-red-500">{error}</p>}
+        {errors.general && <p className="text-red-500">{errors.general}</p>}
         <div className="flex justify-between items-center">
           <Link href="/products" className="text-gray-500 hover:text-gray-700 transition-colors">
             Back to Products

@@ -11,7 +11,8 @@ export default function EditProductPage() {
   const [description, setDescription] = useState('')
   const [price, setPrice] = useState('')
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [errors, setErrors] = useState({})
+  const [generalError, setGeneralError] = useState(null)
 
   useEffect(() => {
     if (id) {
@@ -33,7 +34,7 @@ export default function EditProductPage() {
           setLoading(false)
         })
         .catch((error) => {
-          setError(error.message)
+          setGeneralError(error.message)
           setLoading(false)
         })
     }
@@ -42,13 +43,14 @@ export default function EditProductPage() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
-    setError(null)
+    setErrors({})
+    setGeneralError(null)
 
     const updatedProduct = { name, description, price: parseFloat(price) }
 
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${id}`, {
-        method: 'PATCH', // Usar PATCH para actualizar el producto
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           Authorization: 'Basic ' + btoa('admin:password'),
@@ -57,18 +59,25 @@ export default function EditProductPage() {
       })
 
       if (!res.ok) {
-        throw new Error('Failed to update product')
+        const data = await res.json()
+        if (res.status === 422) {
+          setErrors(data)
+        } else {
+          throw new Error('Failed to update product')
+        }
+        setLoading(false)
+        return
       }
 
       router.push('/products')
     } catch (error) {
-      setError(error.message)
+      setGeneralError(error.message)
       setLoading(false)
     }
   }
 
   if (loading) return <p>Loading...</p>
-  if (error) return <p>Error: {error}</p>
+  if (generalError) return <p>Error: {generalError}</p>
 
   return (
     <div className="container mx-auto p-4 max-w-lg">
@@ -78,32 +87,41 @@ export default function EditProductPage() {
           <label className="block mb-2 font-semibold text-gray-700">Name</label>
           <input
             type="text"
-            className="border border-gray-300 p-2 w-full rounded-lg focus:outline-none focus:border-blue-500"
+            className={`border p-2 w-full rounded-lg focus:outline-none focus:border-blue-500 ${
+              errors.name ? 'border-red-500' : 'border-gray-300'
+            }`}
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
           />
+          {errors.name && <p className="text-red-500 text-sm">{errors.name.join(', ')}</p>}
         </div>
         <div>
           <label className="block mb-2 font-semibold text-gray-700">Description</label>
           <textarea
-            className="border border-gray-300 p-2 w-full rounded-lg focus:outline-none focus:border-blue-500"
+            className={`border p-2 w-full rounded-lg focus:outline-none focus:border-blue-500 ${
+              errors.description ? 'border-red-500' : 'border-gray-300'
+            }`}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
           />
+          {errors.description && <p className="text-red-500 text-sm">{errors.description.join(', ')}</p>}
         </div>
         <div>
           <label className="block mb-2 font-semibold text-gray-700">Price</label>
           <input
             type="number"
-            className="border border-gray-300 p-2 w-full rounded-lg focus:outline-none focus:border-blue-500"
+            className={`border p-2 w-full rounded-lg focus:outline-none focus:border-blue-500 ${
+              errors.price ? 'border-red-500' : 'border-gray-300'
+            }`}
             value={price}
             onChange={(e) => setPrice(e.target.value)}
             required
           />
+          {errors.price && <p className="text-red-500 text-sm">{errors.price.join(', ')}</p>}
         </div>
-        {error && <p className="text-red-500">{error}</p>}
+        {generalError && <p className="text-red-500">{generalError}</p>}
         <div className="flex justify-between items-center">
           <Link href="/products" className="text-gray-500 hover:text-gray-700 transition-colors">
             Back to Products
