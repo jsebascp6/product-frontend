@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Product Frontend
+Este es un frontend construido con Next.js para interactuar con la API de productos.
 
-## Getting Started
+## Requisitos
+Node.js
+npm o Yarn
 
-First, run the development server:
-
+## Instalación y Configuración
+Clona el repositorio:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone git@github.com/product-frontend.git
+cd product-frontend
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Crea el archivo .env.local en la raíz del proyecto y agrega la siguiente configuración:
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3000/api/v1
+```
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+Instala las dependencias:
+```bash
+npm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Inicia el servidor de desarrollo:
+```bash
+npm run dev
+```
 
-## Learn More
+El servidor estará disponible en http://localhost:3001.
 
-To learn more about Next.js, take a look at the following resources:
+## Funcionalidades
+- Listar productos: Visualiza la lista de productos disponibles.
+- Crear producto: Agrega un nuevo producto.
+- Editar producto: Modifica un producto existente.
+- Eliminar producto: Borra un producto de la lista.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Estilos
+Este proyecto utiliza Tailwind CSS para los estilos.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Contribuciones
+Las contribuciones son bienvenidas. Por favor, abre un issue o envía un pull request.
